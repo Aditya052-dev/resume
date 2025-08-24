@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ADITYA LONDHE | Developer Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a1a;
+            color: #e0e0e0;
+            cursor: none; /* Hide the default cursor */
+        }
+
+        /* Custom Cursor Styles */
+        .cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            border: 2px solid #00d4ff;
+            border-radius: 50%;
+            left: 0;
+            top: 0;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+            z-index: 9999;
+            backdrop-filter: hue-rotate(60deg);
+        }
+
+        .cursor.hover {
+            width: 50px;
+            height: 50px;
+            background-color: rgba(0, 212, 255, 0.1);
+        }
+
+        #hero-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: float 4s ease-in-out infinite; /* Faster animation */
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        #header-logo {
+            opacity: 0;
+        }
+
+        .skill-tag {
+            background-color: rgba(20, 20, 40, 0.5);
+            border: 1px solid currentColor;
+            transition: all 0.3s ease;
+            border-radius: 9999px;
+        }
+
+        .skill-tag:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 15px currentColor, 0 0 25px currentColor;
+            background-color: transparent;
+        }
+
+        #skill-list .skill-tag:nth-child(8n + 1) { color: #00f2ea; }
+        #skill-list .skill-tag:nth-child(8n + 2) { color: #ff00e6; }
+        #skill-list .skill-tag:nth-child(8n + 3) { color: #aaff00; }
+        #skill-list .skill-tag:nth-child(8n + 4) { color: #ffaa00; }
+        #skill-list .skill-tag:nth-child(8n + 5) { color: #ff4d4d; }
+        #skill-list .skill-tag:nth-child(8n + 6) { color: #00ffaa; }
+        #skill-list .skill-tag:nth-child(8n + 7) { color: #aa00ff; }
+        #skill-list .skill-tag:nth-child(8n + 8) { color: #f0f0f0; }
+
+
+        .project-card {
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            border-radius: 1rem; /* Rounded corners */
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* New Spotlight Effect */
+        .project-card::before {
+            content: "";
+            position: absolute;
+            left: var(--mouse-x, 0px);
+            top: var(--mouse-y, 0px);
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle at center, rgba(0, 212, 255, 0.3) 0%, rgba(0, 212, 255, 0) 60%);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .project-card:hover::before {
+            opacity: 1;
+        }
+
+        .project-card .p-6 {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card-content {
+            flex-grow: 1;
+        }
+        
+        /* New Experience Timeline Styles */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: rgba(0, 212, 255, 0.2);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-radius: 2px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -12.5px;
+            background-color: #0a0a1a;
+            border: 4px solid #00d4ff;
+            top: 32px;
+            border-radius: 50%;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        .timeline-item:hover::after {
+            background-color: #00d4ff;
+            box-shadow: 0 0 15px #00d4ff;
+        }
+        .timeline-left {
+            left: 0;
+        }
+        .timeline-right {
+            left: 50%;
+        }
+        .timeline-right::after {
+            left: -12.5px;
+        }
+        .timeline-content {
+            padding: 2rem;
+            background: rgba(17, 24, 39, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+        .timeline-content:hover {
+             transform: scale(1.03);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4), 0 0 20px rgba(0, 212, 255, 0.2);
+            border-color: rgba(0, 212, 255, 0.5);
+        }
+        .experience-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #00d4ff;
+        }
+        .experience-date {
+            font-size: 0.9rem;
+            color: #a0aec0;
+            margin-bottom: 0.5rem;
+        }
+        .experience-company {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        /* Text Reveal Animation */
+        .reveal {
+            position: relative;
+            transform: translateY(150px);
+            opacity: 0;
+            transition: 1s all ease;
+        }
+
+        .reveal.active {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        /* Toast Notification */
+        #toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #00d4ff;
+            color: #0a0a1a;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+        }
+
+        #toast.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -20px);
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Toast Notification -->
+    <div id="toast">Message Sent Successfully!</div>
+    
+    <!-- Background Canvas -->
+    <canvas id="hero-canvas"></canvas>
+
+    <!-- Header & Navigation -->
+    <header class="bg-black/30 backdrop-blur-md fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="#home" id="header-logo" class="text-2xl font-bold text-white tracking-wider transition-opacity duration-300">
+                    <span class="text-cyan-400">&lt;</span>ADITYA LONDHE<span class="text-cyan-400">/&gt;</span>
+                </a>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#about" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">About</a>
+                    <a href="#stats" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Stats</a>
+                    <a href="#projects" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Projects</a>
+                    <a href="#experience" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Experience</a>
+                    <a href="#education" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Education</a>
+                    <a href="#contact" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Contact</a>
+                </nav>
+                <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+            <a href="#about" class="block py-2 px-6 text-gray-300 hover:bg-gray-800">About</a>
+            <a href="#stats" class="block py-2 px-6 text-gray-300 hover:bg-gray-800">Stats</a>
+            <a href="#projects" class="block py-2 px-6 text-gray-300 hover:bg-gray-800">Projects</a>
+            <a href="#experience" class="block py-2 px-6 text-gray-300 hover:bg-gray-800">Experience</a>
+            <a href="#education" class="block py-2 px-6 text-gray-300 hover:bg-gray-800">Education</a>
+            <a href="#contact" class="block py-2 px-6 text-gray-300 hover:bg-gray-800">Contact</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="relative h-screen flex items-center justify-center text-center overflow-hidden">
+            <div class="hero-content text-white">
+                <h1 class="text-5xl md:text-7xl font-black uppercase tracking-wider mb-4">
+                    ADITYA LONDHE
+                </h1>
+                <p class="text-xl md:text-2xl font-light text-cyan-300 mb-8">
+                    Aspiring Data Analyst | Python | SQL | Tableau
+                </p>
+                <a href="#projects" class="bg-cyan-500 hover:bg-cyan-400 text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+                    View My Work
+                </a>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-20 md:py-32 bg-black/30">
+            <div class="container mx-auto px-6 reveal">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-white">About Me</h2>
+                    <div class="w-24 h-1 bg-cyan-400 mx-auto mt-4 rounded"></div>
+                </div>
+                <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-1/3 text-center">
+                        <img src="https://placehold.co/400x400/111827/7dd3fc?text=AL" alt="Aditya Londhe" class="rounded-full w-64 h-64 mx-auto border-4 border-cyan-400/50 shadow-lg">
+                    </div>
+                    <div class="md:w-2/3">
+                        <p id="bio-text" class="text-lg text-gray-300 mb-6">
+                            Aspiring Data Analyst with a background in Python, SQL, Tableau, and Data Visualization. Skilled in data cleaning, exploratory analysis, and predictive modeling with practical project experience. Hands-on exposure to real-world analytics and ML applications through academic and internship projects.
+                        </p>
+                        <div class="flex justify-center md:justify-start">
+                            <a href="./Aditya Londhe.pdf" download="Aditya_Londhe_Resume.pdf" target="_blank" class="bg-transparent border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+                                Download Resume
+                            </a>
+                        </div>
+                        <h3 class="text-2xl font-semibold text-white mb-4 mt-8">My Skillset</h3>
+                        <div id="skill-list" class="flex flex-wrap gap-3">
+                            <span class="skill-tag py-2 px-4 text-sm">Python</span>
+                            <span class="skill-tag py-2 px-4 text-sm">Core Java</span>
+                            <span class="skill-tag py-2 px-4 text-sm">MySQL</span>
+                            <span class="skill-tag py-2 px-4 text-sm">Bash</span>
+                            <span class="skill-tag py-2 px-4 text-sm">HTML</span>
+                            <span class="skill-tag py-2 px-4 text-sm">CSS</span>
+                            <span class="skill-tag py-2 px-4 text-sm">Scikit-learn</span>
+                            <span class="skill-tag py-2 px-4 text-sm">Keras</span>
+                            <span class="skill-tag py-2 px-4 text-sm">Pandas</span>
+                            <span class="skill-tag py-2 px-4 text-sm">NumPy</span>
+                            <span class="skill-tag py-2 px-4 text-sm">Tableau</span>
+                            <span class="skill-tag py-2 px-4 text-sm">Predictive Modeling</span>
+                            <span class="skill-tag py-2 px-4 text-sm">Deep Learning</span>
+                            <span class="skill-tag py-2 px-4 text-sm">Linux</span>
+                            <span class="skill-tag py-2 px-4 text-sm">WebRTC</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Stats Section -->
+        <section id="stats" class="py-20 md:py-32 bg-black/30">
+            <div class="container mx-auto px-6 reveal">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
+                    <div>
+                        <h3 class="text-5xl font-bold text-cyan-400" data-target="50000">0</h3>
+                        <p class="text-lg text-gray-400 mt-2">Lines of Code</p>
+                    </div>
+                    <div>
+                        <h3 class="text-5xl font-bold text-cyan-400" data-target="12">0</h3>
+                        <p class="text-lg text-gray-400 mt-2">Projects Completed</p>
+                    </div>
+                    <div>
+                        <h3 class="text-5xl font-bold text-cyan-400" data-target="8">0</h3>
+                        <p class="text-lg text-gray-400 mt-2">Models Deployed</p>
+                    </div>
+                    <div class="md:col-span-1">
+                        <h3 class="text-5xl font-bold text-cyan-400" data-target="9">0</h3>
+                        <p class="text-lg text-gray-400 mt-2">GitHub Commits</p>
+                    </div>
+                    <!-- <div class="md:col-span-1">
+                        <h3 class="text-5xl font-bold text-cyan-400" data-target="100">0</h3>
+                        <p class="text-lg text-gray-400 mt-2">Terabytes Processed</p>
+                    </div> -->
+                    <div class="md:col-span-1">
+                        <h3 class="text-5xl font-bold text-cyan-400" data-target="999">0</h3>
+                        <p class="text-lg text-gray-400 mt-2">Coffees Consumed</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="py-20 md:py-32 bg-black/30">
+            <div class="container mx-auto px-6 reveal">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white">My Projects</h2>
+                    <p class="text-lg text-gray-400 mt-2">A selection of my work in Data Analytics, ML, and AI.</p>
+                    <div class="w-24 h-1 bg-cyan-400 mx-auto mt-4 rounded"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Project 1: Agentic Visual Understanding Chat Assistant -->
+                    <div class="project-card overflow-hidden group">
+                        <img src="https://placehold.co/600x400/0a0a1a/e0e0e0?text=Video+Analysis" class="w-full h-48 object-cover" alt="Agentic Visual Understanding Chat Assistant">
+                        <div class="p-6">
+                            <div class="project-card-content">
+                                <h3 class="text-xl font-bold text-white mb-2">Agentic Visual Understanding Chat Assistant</h3>
+                                <p class="text-gray-400 mb-4 text-sm project-description">Analyzed video streams in real-time to identify key events such as identify objects in video. Developed a Python back-end with the Gemini API and a Streamlit front-end for conversational interaction.</p>
+                                <div class="flex flex-wrap gap-2 mb-4 project-tags">
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Python</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Gemini API</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Streamlit</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">WebRTC</span>
+                                </div>
+                            </div>
+                            <a href="https://github.com/Aditya052-dev/Video-Summarization-ChatBot" target="_blank"  class="text-cyan-400 hover:text-cyan-300 font-semibold mt-4 inline-block">View Details &rarr;</a>
+                        </div>
+                    </div>
+                    <!-- Project 2: DGA Detection -->
+                    <div class="project-card overflow-hidden group">
+                        <img src="https://placehold.co/600x400/0a0a1a/e0e0e0?text=DGA+Detection" class="w-full h-48 object-cover" alt="DGA Detection Project">
+                        <div class="p-6">
+                            <div class="project-card-content">
+                                <h3 class="text-xl font-bold text-white mb-2">DGA Detection Using Deep Learning</h3>
+                                <p class="text-gray-400 mb-4 text-sm project-description">Designed and implemented a deep learning model using TensorFlow to detect and classify anomalous domain patterns from DNS data, enhancing cybersecurity monitoring with high accuracy.</p>
+                                <div class="flex flex-wrap gap-2 mb-4 project-tags">
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Deep Learning</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">TensorFlow</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Cybersecurity</span>
+                                </div>
+                            </div>
+                            <a href="https://github.com/Aditya052-dev/DGA" target="_blank" class="text-cyan-400 hover:text-cyan-300 font-semibold mt-4 inline-block">View on GitHub &rarr;</a>
+                        </div>
+                    </div>
+                    <!-- Project 3: Song Recommendation -->
+                    <div class="project-card overflow-hidden group">
+                        <img src="https://placehold.co/600x400/0a0a1a/e0e0e0?text=Mood+Music" class="w-full h-48 object-cover" alt="Song Recommendation Project">
+                        <div class="p-6">
+                            <div class="project-card-content">
+                                <h3 class="text-xl font-bold text-white mb-2">Song Recommendation Using Mood Detection</h3>
+                                <p class="text-gray-400 mb-4 text-sm project-description">Developed an emotion-based music recommendation system using real-time facial expression recognition. Used WebRTC and MediaPipe for mood detection and ML classification.</p>
+                                <div class="flex flex-wrap gap-2 mb-4 project-tags">
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Machine Learning</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">WebRTC</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">MediaPipe</span>
+                                </div>
+                            </div>
+                            <a href="https://github.com/Aditya052-dev/song-recommendation-using-mood-detection" target="_blank" class="text-cyan-400 hover:text-cyan-300 font-semibold mt-4 inline-block">View Details &rarr;</a>
+                        </div>
+                    </div>
+                     <!-- Project 4: More Project Placeholder -->
+                    <!-- <div class="project-card overflow-hidden group">
+                        <img src="https://placehold.co/600x400/0a0a1a/e0e0e0?text=More+Projects" class="w-full h-48 object-cover" alt="More Projects">
+                        <div class="p-6">
+                            <div class="project-card-content">
+                                <h3 class="text-xl font-bold text-white mb-2">Another Awesome Project</h3>
+                                <p class="text-gray-400 mb-4 text-sm project-description">A brief description of another one of your cool projects from your GitHub can go here.</p>
+                                <div class="flex flex-wrap gap-2 mb-4 project-tags">
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Technology 1</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Technology 2</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Technology 3</span>
+                                </div>
+                            </div>
+                            <a href="#" class="text-cyan-400 hover:text-cyan-300 font-semibold mt-4 inline-block">View on GitHub &rarr;</a>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="text-center mt-16">
+                     <a href="https://github.com/Aditya052-dev" target="_blank" class="bg-cyan-500 hover:bg-cyan-400 text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+                        View More on GitHub
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-20 md:py-32 bg-black/30">
+            <div class="container mx-auto px-6 reveal">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white">Professional Experience</h2>
+                    <div class="w-24 h-1 bg-cyan-400 mx-auto mt-4 rounded"></div>
+                </div>
+                <div class="timeline">
+                    <!-- Item 1: ML Intern -->
+                    <div class="timeline-item timeline-left">
+                        <div class="timeline-content">
+                            <h3 class="experience-title">ML Intern</h3>
+                            <p class="experience-date">25 Dec 2024 - Present</p>
+                            <p class="experience-company">Feasible Research and Technologies Pvt. Ltd.</p>
+                            <p class="text-gray-300">Assisted in developing and testing machine learning models and supported real-time data processing tasks, gaining hands-on experience in a professional tech environment.</p>
+                        </div>
+                    </div>
+                     <!-- Item 2: ML Intern Cognifyz -->
+                     <div class="timeline-item timeline-right">
+                        <div class="timeline-content">
+                             <h3 class="experience-title">ML Intern</h3>
+                             <p class="experience-date">1 Dec 2024 - 31 Dec 2024</p>
+                             <p class="experience-company">Cognifyz Technologies</p>
+                             <p class="text-gray-300">Practiced supervised learning models and Python-based ML tasks to build a foundational understanding of applied machine learning.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="py-20 md:py-32 bg-black/30">
+            <div class="container mx-auto px-6 reveal">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold text-white">Education</h2>
+                    <div class="w-24 h-1 bg-cyan-400 mx-auto mt-4 rounded"></div>
+                </div>
+                <div class="timeline">
+                    <!-- Item 1: PG Diploma -->
+                    <div class="timeline-item timeline-left">
+                        <div class="timeline-content">
+                             <h3 class="experience-title">PG Diploma in Big Data Analytics</h3>
+                             <p class="experience-date">Mar 2024 - Aug 2024</p>
+                             <p class="experience-company">Center for Development of Advanced Computing (CDAC), Bangalore</p>
+                             <p class="text-gray-300">Completed post-graduate studies focusing on big data technologies and advanced analytics. Score: 68%</p>
+                        </div>
+                    </div>
+                    <!-- Item 2: Codenera -->
+                    <div class="timeline-item timeline-right">
+                        <div class="timeline-content">
+                             <h3 class="experience-title">Python Data Science and Java</h3>
+                             <p class="experience-date">Aug 2023 - Feb 2024</p>
+                             <p class="experience-company">Codenera Institute, Pune</p>
+                             <p class="text-gray-300">Specialized training in Python for Data Science and Core Java programming.</p>
+                        </div>
+                    </div>
+                    <!-- Item 3: B.Tech -->
+                    <div class="timeline-item timeline-left">
+                        <div class="timeline-content">
+                             <h3 class="experience-title">Bachelor of Technology in Computer Science</h3>
+                             <p class="experience-date">Aug 2020 - July 2023</p>
+                             <p class="experience-company">Shri Shankaracharya Institute of Professional Management & Technology, Raipur</p>
+                             <p class="text-gray-300">Graduated with a comprehensive understanding of computer science fundamentals. Score: 77%</p>
+                        </div>
+                    </div>
+                    <!-- Item 4: Diploma -->
+                    <div class="timeline-item timeline-right">
+                        <div class="timeline-content">
+                             <h3 class="experience-title">Diploma in Computer Science</h3>
+                             <p class="experience-date">Aug 2017 - May 2020</p>
+                             <p class="experience-company">Kalinga University, Raipur</p>
+                             <p class="text-gray-300">Built a strong foundational knowledge in computer science principles. Score: 71%</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 md:py-32 bg-black/30">
+            <div class="container mx-auto px-6 reveal">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-bold text-white">Get In Touch</h2>
+                    <p class="text-lg text-gray-400 mt-2">I'm open to new opportunities and collaborations.</p>
+                    <div class="w-24 h-1 bg-cyan-400 mx-auto mt-4 rounded"></div>
+                </div>
+                <div class="max-w-xl mx-auto">
+                    <form id="contact-form" action="https://formspree.io/f/mblarkeq" method="POST" class="space-y-6">
+                        <input type="text" name="name" placeholder="Your Name" class="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" required>
+                        <input type="email" name="email" placeholder="Your Email" class="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" required>
+                        <textarea id="contact-message" name="message" placeholder="Your Message" rows="5" class="w-full bg-gray-800 border border-gray-700 rounded-md py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 transition" required></textarea>
+                        <div class="text-center">
+                            <button type="submit" class="bg-cyan-500 hover:bg-cyan-400 text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+                                Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900/50 py-8">
+        <div class="container mx-auto px-6 text-center text-gray-400">
+            <div class="flex justify-center space-x-6 mb-4">
+                <a href="https://github.com/Aditya052-dev" target="_blank" class="hover:text-cyan-400 transition-colors">GitHub</a>
+                <a href="https://www.linkedin.com/in/aditya-londhe-69a106207" target="_blank" class="hover:text-cyan-400 transition-colors">LinkedIn</a>
+            </div>
+            <p>&copy; 2025 ADITYA LONDHE. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            document.querySelectorAll('#mobile-menu a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
+
+            // --- Custom Cursor ---
+            const cursor = document.querySelector('.cursor');
+            document.addEventListener('mousemove', e => {
+                cursor.style.top = e.clientY + 'px';
+                cursor.style.left = e.clientX + 'px';
+            });
+
+            document.querySelectorAll('a, button, input, .project-card, .timeline-content').forEach(el => {
+                el.addEventListener('mouseover', () => cursor.classList.add('hover'));
+                el.addEventListener('mouseout', () => cursor.classList.remove('hover'));
+            });
+
+            // --- Three.js Animated Background ---
+            let scene, camera, renderer, particles, lines;
+            let mouseX = 0, mouseY = 0;
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            function initThreeJS() {
+                const canvas = document.getElementById('hero-canvas');
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 3000);
+                camera.position.z = 1000;
+
+                renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setClearColor(0x0a0a1a, 1);
+
+                const particleCount = 500;
+                const positions = new Float32Array(particleCount * 3);
+                const velocities = new Float32Array(particleCount * 3);
+                const colors = new Float32Array(particleCount * 3);
+                const color = new THREE.Color();
+
+                for (let i = 0; i < positions.length; i +=3) {
+                    positions[i] = Math.random() * 2000 - 1000;
+                    positions[i + 1] = Math.random() * 2000 - 1000;
+                    positions[i + 2] = Math.random() * 2000 - 1000;
+                    
+                    velocities[i] = (Math.random() - 0.5) * 0.5;
+                    velocities[i+1] = (Math.random() - 0.5) * 0.5;
+                    velocities[i+2] = (Math.random() - 0.5) * 0.5;
+                    
+                    color.setHSL(i / positions.length, 1.0, 0.5);
+                    colors[i] = color.r;
+                    colors[i + 1] = color.g;
+                    colors[i + 2] = color.b;
+                }
+
+                const particleGeometry = new THREE.BufferGeometry();
+                particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                particleGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
+                particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+                const particleMaterial = new THREE.PointsMaterial({
+                    size: 10,
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.8,
+                    blending: THREE.AdditiveBlending
+                });
+
+                particles = new THREE.Points(particleGeometry, particleMaterial);
+                scene.add(particles);
+
+                // Lines
+                const lineGeometry = new THREE.BufferGeometry();
+                const linePositions = new Float32Array(particleCount * particleCount * 3);
+                lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+                const lineMaterial = new THREE.LineBasicMaterial({
+                    color: 0xffffff,
+                    transparent: true,
+                    opacity: 0.1
+                });
+                lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+                scene.add(lines);
+
+                document.addEventListener('mousemove', onDocumentMouseMove, false);
+                window.addEventListener('resize', onWindowResize, false);
+                animate();
+            }
+            
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            }
+
+            function onDocumentMouseMove(event) {
+                mouseX = (event.clientX - windowHalfX);
+                mouseY = (event.clientY - windowHalfY);
+            }
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                camera.position.x += (mouseX - camera.position.x) * 0.05;
+                camera.position.y += (-mouseY - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+
+                const positions = particles.geometry.attributes.position.array;
+                const velocities = particles.geometry.attributes.velocity.array;
+                const linePositions = lines.geometry.attributes.position.array;
+                let vertexpos = 0;
+                const connectionDistance = 250;
+
+                for (let i = 0; i < positions.length; i += 3) {
+                    positions[i] += velocities[i];
+                    positions[i+1] += velocities[i+1];
+                    positions[i+2] += velocities[i+2];
+
+                    if (positions[i+1] < -1000 || positions[i+1] > 1000) velocities[i+1] = -velocities[i+1];
+                    if (positions[i] < -1000 || positions[i] > 1000) velocities[i] = -velocities[i];
+                    if (positions[i+2] < -1000 || positions[i+2] > 1000) velocities[i+2] = -velocities[i+2];
+
+                    for (let j = i + 3; j < positions.length; j += 3) {
+                        const dx = positions[i] - positions[j];
+                        const dy = positions[i + 1] - positions[j + 1];
+                        const dz = positions[i + 2] - positions[j + 2];
+                        const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                        if (dist < connectionDistance) {
+                            linePositions[vertexpos++] = positions[i];
+                            linePositions[vertexpos++] = positions[i+1];
+                            linePositions[vertexpos++] = positions[i+2];
+                            linePositions[vertexpos++] = positions[j];
+                            linePositions[vertexpos++] = positions[j+1];
+                            linePositions[vertexpos++] = positions[j+2];
+                        }
+                    }
+                }
+                particles.geometry.attributes.position.needsUpdate = true;
+                lines.geometry.attributes.position.needsUpdate = true;
+                lines.geometry.setDrawRange(0, vertexpos / 3);
+
+                renderer.render(scene, camera);
+            }
+
+            function reveal() {
+                var reveals = document.querySelectorAll(".reveal");
+
+                for (var i = 0; i < reveals.length; i++) {
+                    var windowHeight = window.innerHeight;
+                    var elementTop = reveals[i].getBoundingClientRect().top;
+                    var elementVisible = 150;
+
+                    if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                    } else {
+                    reveals[i].classList.remove("active");
+                    }
+                }
+            }
+
+            window.addEventListener("scroll", reveal);
+            
+            // Header visibility on scroll
+            const headerLogo = document.getElementById('header-logo');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 100) {
+                    headerLogo.style.opacity = '1';
+                } else {
+                    headerLogo.style.opacity = '0';
+                }
+            });
+
+            // Spotlight effect for project cards
+            const cards = document.querySelectorAll('.project-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+
+            // Animated Stats
+            const statsSection = document.getElementById('stats');
+            if (statsSection) { // Added null check
+                const counters = statsSection.querySelectorAll('.text-5xl');
+                const speed = 200; // The lower the slower
+
+                const animateStats = () => {
+                    counters.forEach(counter => {
+                        const updateCount = () => {
+                            const target = +counter.getAttribute('data-target');
+                            const count = +counter.innerText;
+
+                            const inc = target / speed;
+
+                            if (count < target) {
+                                counter.innerText = Math.ceil(count + inc);
+                                setTimeout(updateCount, 1);
+                            } else {
+                                counter.innerText = target.toLocaleString();
+                            }
+                        };
+                        updateCount();
+                    });
+                };
+                
+                const statsObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            animateStats();
+                            statsObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                statsObserver.observe(statsSection);
+            }
+
+            // --- Contact Form Submission ---
+            const contactForm = document.getElementById('contact-form');
+            const toast = document.getElementById('toast');
+
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(contactForm);
+                const object = {};
+                formData.forEach((value, key) => {
+                    object[key] = value;
+                });
+                const json = JSON.stringify(object);
+
+                fetch(contactForm.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: json
+                })
+                .then(response => {
+                    if (response.ok) {
+                        toast.classList.add('show');
+                        contactForm.reset();
+                        setTimeout(() => {
+                            toast.classList.remove('show');
+                        }, 3000);
+                    } else {
+                        // Handle errors here if you want
+                        console.error('Form submission failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error submitting form:', error);
+                });
+            });
+
+
+            initThreeJS();
+        });
+    </script>
+
+    <script>
+        // Disable right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+        document.onkeydown = function(e) {
+            if (event.keyCode == 123) { // F12
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
+                return false;
+            }
+            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
+                return false;
+            }
+            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>
