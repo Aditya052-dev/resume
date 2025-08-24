@@ -243,6 +243,38 @@
             transform: translate(-50%, -20px);
         }
 
+        /* --- RESPONSIVE STYLES FOR MOBILE --- */
+        @media screen and (max-width: 768px) {
+            /* Adjust timeline for single column layout on mobile */
+            .timeline::after {
+                left: 31px; /* Move the center line to the left */
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px; /* Add space for the timeline line */
+                padding-right: 25px;
+            }
+
+            /* Reset the left positioning for all items */
+            .timeline-left, .timeline-right {
+                left: 0;
+            }
+
+            /* Position all dots on the left side of the timeline */
+            .timeline-item::after {
+                left: 15px;
+            }
+            .timeline-right::after {
+                left: 15px; /* Ensure right items also have their dot on the left */
+            }
+
+            /* Hide custom cursor on touch devices for better usability */
+            .cursor {
+                display: none;
+            }
+        }
+
     </style>
 </head>
 <body class="antialiased">
@@ -591,21 +623,28 @@
 
             // --- Custom Cursor ---
             const cursor = document.querySelector('.cursor');
-            document.addEventListener('mousemove', e => {
-                cursor.style.top = e.clientY + 'px';
-                cursor.style.left = e.clientX + 'px';
-            });
+            // Only enable custom cursor on non-touch devices
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            if (!isTouchDevice) {
+                document.addEventListener('mousemove', e => {
+                    cursor.style.top = e.clientY + 'px';
+                    cursor.style.left = e.clientX + 'px';
+                });
 
-            document.querySelectorAll('a, button, input, .project-card, .timeline-content').forEach(el => {
-                el.addEventListener('mouseover', () => cursor.classList.add('hover'));
-                el.addEventListener('mouseout', () => cursor.classList.remove('hover'));
-            });
+                document.querySelectorAll('a, button, input, .project-card, .timeline-content').forEach(el => {
+                    el.addEventListener('mouseover', () => cursor.classList.add('hover'));
+                    el.addEventListener('mouseout', () => cursor.classList.remove('hover'));
+                });
+            } else {
+                cursor.style.display = 'none';
+            }
+
 
             // --- Three.js Animated Background ---
             let scene, camera, renderer, particles, lines;
             let mouseX = 0, mouseY = 0;
-            const windowHalfX = window.innerWidth / 2;
-            const windowHalfY = window.innerHeight / 2;
+            let windowHalfX = window.innerWidth / 2;
+            let windowHalfY = window.innerHeight / 2;
 
             function initThreeJS() {
                 const canvas = document.getElementById('hero-canvas');
@@ -672,6 +711,8 @@
             }
             
             function onWindowResize() {
+                windowHalfX = window.innerWidth / 2;
+                windowHalfY = window.innerHeight / 2;
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -847,7 +888,6 @@
             initThreeJS();
         });
     </script>
-
     <script>
         // Disable right-click
         document.addEventListener('contextmenu', function(e) {
@@ -870,5 +910,6 @@
             }
         }
     </script>
+
 </body>
 </html>
