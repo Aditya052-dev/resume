@@ -10,6 +10,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
+ /* Responsive Timeline for Mobile */
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 30px; /* Move the vertical line to the left */
+            }
+            .timeline-item {
+                width: 100%; /* Make each item take the full width */
+                padding-left: 70px; /* Add space for the line and circle */
+                padding-right: 25px;
+            }
+            .timeline-right {
+                left: 0%; /* Reset the position for right-aligned items */
+            }
+            .timeline-item::after,
+            .timeline-right::after {
+                left: 17.5px; /* Move the circle for all items to the left */
+            }
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0a0a1a;
