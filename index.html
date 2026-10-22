@@ -3,7 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ADITYA LONDHE | Developer Portfolio</title>
+    <title>Aditya Londhe | Machine Learning Engineer</title>
+    <meta name="description" content="Aditya Londhe – Machine Learning Engineer building healthcare AI: LLM fine-tuning, RAG, clinical decision support and production ML at AIIMS Raipur.">
+    <meta property="og:title" content="Aditya Londhe | Machine Learning Engineer">
+    <meta property="og:description" content="Healthcare AI, LLMs, RAG and production ML.">
+    <meta property="og:type" content="website">
+    <script>
+        // Apply saved theme before the page paints, so there is no flash
+        try {
+            if (localStorage.getItem('theme') === 'light') document.documentElement.classList.add('light');
+        } catch (e) {}
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -77,6 +87,45 @@
             background-color: transparent;
         }
 
+        /* Skill level fill: on hover the pill fills up to how well I know the skill */
+        .skill-tag {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            cursor: default;
+        }
+        .skill-tag::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            z-index: -1;
+            background: currentColor;
+            opacity: 0.32;
+            transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .skill-tag:hover::before,
+        .skill-tag:focus-visible::before { width: var(--lvl, 0%); }
+        /* Small level number that appears on hover */
+        .skill-tag .lvl {
+            display: inline-block;
+            max-width: 0;
+            opacity: 0;
+            overflow: hidden;
+            vertical-align: bottom;
+            font-size: 0.72rem;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: max-width 0.4s ease, opacity 0.4s ease, margin 0.4s ease;
+        }
+        .skill-tag:hover .lvl,
+        .skill-tag:focus-visible .lvl { max-width: 3rem; opacity: 1; margin-left: 0.4rem; }
+        html.light .skill-tag::before { opacity: 0.22; }
+        .skill-hint { font-size: 0.85rem; color: #a0aec0; margin: -0.5rem 0 1rem; }
+        html.light .skill-hint { color: #64748b; }
+
         #skill-list .skill-tag:nth-child(8n + 1) { color: #00f2ea; }
         #skill-list .skill-tag:nth-child(8n + 2) { color: #ff00e6; }
         #skill-list .skill-tag:nth-child(8n + 3) { color: #aaff00; }
@@ -117,6 +166,67 @@
 
         .project-card:hover::before {
             opacity: 1;
+        }
+
+        /* Illustration colours (change with theme) */
+        :root { --ill-a: #00d4ff; --ill-b: #c084fc; --ill-c: #f472b6; --ill-soft: rgba(255,255,255,0.18); }
+        html.light { --ill-a: #0e7490; --ill-b: #7c3aed; --ill-c: #db2777; --ill-soft: rgba(15,23,42,0.15); }
+
+        .card-banner svg {
+            width: 100%;
+            max-width: 240px;
+            height: 104px;
+            overflow: visible;
+            transition: transform 0.4s ease;
+        }
+        .project-card:hover .card-banner svg { transform: scale(1.06); }
+        .card-banner .ill-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            opacity: 0.85;
+            margin-top: 0.4rem;
+        }
+        .ill-a { stroke: var(--ill-a); }
+        .ill-b { stroke: var(--ill-b); }
+        .ill-c { stroke: var(--ill-c); }
+        .ill-soft { stroke: var(--ill-soft); }
+        .fill-a { fill: var(--ill-a); }
+        .fill-b { fill: var(--ill-b); }
+        .fill-c { fill: var(--ill-c); }
+        .fill-soft { fill: var(--ill-soft); }
+        @keyframes ill-pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
+        @keyframes ill-dash { to { stroke-dashoffset: 0; } }
+        .ill-pulse { animation: ill-pulse 2.4s ease-in-out infinite; }
+        .ill-pulse-2 { animation: ill-pulse 2.4s ease-in-out 0.8s infinite; }
+        .ill-pulse-3 { animation: ill-pulse 2.4s ease-in-out 1.6s infinite; }
+        .ill-draw { stroke-dasharray: 400; stroke-dashoffset: 400; animation: ill-dash 3s ease-in-out infinite alternate; }
+
+        .card-banner {
+            height: 11rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1rem;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #e0f7ff;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.25), rgba(170, 0, 255, 0.2));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .research-badge {
+            display: inline-block;
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #a0aec0;
+            border: 1px solid rgba(160, 174, 192, 0.4);
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            align-self: flex-start;
         }
 
         .project-card .p-6 {
@@ -243,6 +353,132 @@
             transform: translate(-50%, -20px);
         }
 
+        /* --- NEURON QUOTES --- */
+        #quote-card {
+            position: fixed;
+            z-index: 60;
+            width: min(340px, calc(100vw - 32px));
+            padding: 1.1rem 1.25rem 1rem;
+            border-radius: 1rem;
+            background: rgba(10, 10, 26, 0.92);
+            border: 1px solid rgba(0, 212, 255, 0.45);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(0, 212, 255, 0.18);
+            backdrop-filter: blur(10px);
+            color: #e0e0e0;
+            opacity: 0;
+            transform: translateY(8px) scale(0.97);
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        #quote-card.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+        #quote-card .q-mark { font-size: 2.4rem; line-height: 1; color: #00d4ff; font-family: Georgia, serif; height: 1.2rem; }
+        #quote-card .q-text { font-size: 0.98rem; line-height: 1.55; margin: 0.4rem 0 0.75rem; font-style: italic; }
+        #quote-card .q-author { font-weight: 700; color: #00d4ff; font-size: 0.9rem; }
+        #quote-card .q-role { font-size: 0.78rem; color: #a0aec0; }
+        #quote-card .q-close {
+            position: absolute; top: 0.5rem; right: 0.7rem;
+            font-size: 1.2rem; line-height: 1; color: #a0aec0;
+        }
+        #quote-card .q-close:hover { color: #00d4ff; }
+        #quote-card .q-next {
+            margin-top: 0.75rem; font-size: 0.78rem; font-weight: 600; color: #00d4ff;
+        }
+        .neuron-ring {
+            position: fixed; z-index: 55; width: 16px; height: 16px; border-radius: 50%;
+            border: 2px solid #00d4ff; pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: neuron-ring 0.7s ease-out forwards;
+        }
+        @keyframes neuron-ring {
+            from { width: 12px; height: 12px; opacity: 1; }
+            to { width: 70px; height: 70px; opacity: 0; }
+        }
+        .neuron-hint { font-size: 0.85rem; color: #a0aec0; margin-top: 1.75rem; }
+        .neuron-hint b { color: #00d4ff; font-weight: 600; }
+        body.near-neuron .cursor { width: 46px; height: 46px; background-color: rgba(0, 212, 255, 0.15); }
+
+        html.light #quote-card { background: rgba(255, 255, 255, 0.96); color: #1e293b; border-color: rgba(14, 116, 144, 0.4); box-shadow: 0 10px 40px rgba(15, 23, 42, 0.15); }
+        html.light #quote-card .q-mark,
+        html.light #quote-card .q-author,
+        html.light #quote-card .q-next { color: #0e7490; }
+        html.light #quote-card .q-role { color: #64748b; }
+        html.light .neuron-ring { border-color: #0f172a; }
+        html.light .neuron-hint { color: #64748b; }
+        html.light .neuron-hint b { color: #0e7490; }
+
+        /* --- THEME TOGGLE --- */
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
+        .theme-toggle {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            color: #00d4ff;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle:hover { background: rgba(0, 212, 255, 0.15); transform: rotate(20deg); }
+        .theme-toggle .icon-sun { display: none; }
+        html.light .theme-toggle .icon-sun { display: block; }
+        html.light .theme-toggle .icon-moon { display: none; }
+
+        /* --- LIGHT MODE --- */
+        html.light body { background-color: #f6f8fb; color: #1e293b; }
+        html.light .text-white { color: #0f172a; }
+        html.light .text-gray-300 { color: #334155; }
+        html.light .text-gray-400 { color: #475569; }
+        html.light .text-cyan-300,
+        html.light .text-cyan-400,
+        html.light .text-cyan-500 { color: #0e7490; }
+        html.light .hover\:text-cyan-400:hover,
+        html.light .hover\:text-cyan-300:hover { color: #0891b2; }
+        html.light .bg-black\/30 { background-color: rgba(255, 255, 255, 0.55); }
+        html.light header.bg-black\/30 { background-color: rgba(255, 255, 255, 0.75); box-shadow: 0 1px 0 rgba(15, 23, 42, 0.08); }
+        html.light .bg-cyan-900\/50 { background-color: #cffafe; }
+        html.light .bg-gray-900\/50 { background-color: #e2e8f0; }
+        html.light .hover\:bg-gray-800:hover { background-color: #e2e8f0; }
+        html.light .border-cyan-500 { border-color: #0e7490; }
+        html.light a.hover\:bg-cyan-500:hover { color: #ffffff; background-color: #0e7490; }
+
+        html.light .project-card,
+        html.light .timeline-content {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(15, 23, 42, 0.1);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+        }
+        html.light .project-card::before {
+            background: radial-gradient(circle at center, rgba(14, 116, 144, 0.15) 0%, rgba(14, 116, 144, 0) 60%);
+        }
+        html.light .card-banner {
+            color: #0f172a;
+            background: linear-gradient(135deg, rgba(14, 116, 144, 0.15), rgba(124, 58, 237, 0.12));
+            border-bottom-color: rgba(15, 23, 42, 0.08);
+        }
+        html.light .research-badge { color: #475569; border-color: rgba(71, 85, 105, 0.4); }
+        html.light .experience-title { color: #0e7490; }
+        html.light .experience-date { color: #64748b; }
+        html.light .timeline::after { background-color: rgba(14, 116, 144, 0.25); }
+        html.light .timeline-item::after { background-color: #f6f8fb; border-color: #0e7490; }
+        html.light .timeline-item:hover::after { background-color: #0e7490; box-shadow: 0 0 12px rgba(14, 116, 144, 0.5); }
+
+        /* Neon skill colours are too bright on white, so use deeper shades */
+        html.light #skill-list .skill-tag { background-color: rgba(255, 255, 255, 0.8); }
+        html.light #skill-list .skill-tag:nth-child(8n + 1) { color: #0e7490; }
+        html.light #skill-list .skill-tag:nth-child(8n + 2) { color: #a21caf; }
+        html.light #skill-list .skill-tag:nth-child(8n + 3) { color: #4d7c0f; }
+        html.light #skill-list .skill-tag:nth-child(8n + 4) { color: #b45309; }
+        html.light #skill-list .skill-tag:nth-child(8n + 5) { color: #b91c1c; }
+        html.light #skill-list .skill-tag:nth-child(8n + 6) { color: #047857; }
+        html.light #skill-list .skill-tag:nth-child(8n + 7) { color: #6d28d9; }
+        html.light #skill-list .skill-tag:nth-child(8n + 8) { color: #334155; }
+
+        html.light input,
+        html.light textarea { background-color: #ffffff; border-color: #cbd5e1; color: #0f172a; }
+        html.light .cursor { border-color: #0e7490; }
+        html.light .theme-toggle { color: #0e7490; border-color: rgba(14, 116, 144, 0.5); }
+
         /* --- RESPONSIVE STYLES FOR MOBILE --- */
         @media screen and (max-width: 768px) {
             /* Adjust timeline for single column layout on mobile */
@@ -288,6 +524,16 @@
     <!-- Background Canvas -->
     <canvas id="hero-canvas"></canvas>
 
+    <!-- Quote shown when a background neuron is clicked -->
+    <div id="quote-card" role="dialog" aria-live="polite" aria-label="Quote">
+        <button class="q-close" aria-label="Close quote">&times;</button>
+        <div class="q-mark">&ldquo;</div>
+        <p class="q-text"></p>
+        <div class="q-author"></div>
+        <div class="q-role"></div>
+        <button class="q-next">Another quote &rarr;</button>
+    </div>
+
     <!-- Header & Navigation -->
     <header class="bg-black/30 backdrop-blur-md fixed top-0 left-0 right-0 z-50">
         <div class="container mx-auto px-6 py-4">
@@ -303,9 +549,17 @@
                     <a href="#education" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Education</a>
                     <a href="#contact" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300">Contact</a>
                 </nav>
-                <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-                </button>
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Switch between dark and light mode" title="Switch theme">
+                        <!-- Moon icon: shown in dark mode -->
+                        <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+                        <!-- Sun icon: shown in light mode -->
+                        <svg class="icon-sun w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path stroke-linecap="round" d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+                    </button>
+                    <button id="mobile-menu-button" class="md:hidden text-gray-300 focus:outline-none" aria-label="Open menu">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
             </div>
         </div>
         <!-- Mobile Menu -->
@@ -326,12 +580,21 @@
                 <h1 class="text-5xl md:text-7xl font-black uppercase tracking-wider mb-4">
                     ADITYA LONDHE
                 </h1>
-                <p class="text-xl md:text-2xl font-light text-cyan-300 mb-8">
-                    Aspiring Data Analyst | Python | SQL | Tableau
+                <p class="text-xl md:text-2xl font-light text-cyan-300 mb-3">
+                    Machine Learning Engineer | Healthcare AI | LLMs &amp; RAG
                 </p>
-                <a href="#projects" class="bg-cyan-500 hover:bg-cyan-400 text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
-                    View My Work
-                </a>
+                <p class="text-base md:text-lg text-gray-400 mb-8 px-6">
+                    Building clinical AI systems for the Emergency Department at AIIMS Raipur
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <a href="#projects" class="bg-cyan-500 hover:bg-cyan-400 text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+                        View My Work
+                    </a>
+                    <a href="./Aditya_Londhe_Resume.pdf" target="_blank" class="border border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+                        Resume
+                    </a>
+                </div>
+                <p class="neuron-hint">✨ Tip: <b>click any neuron</b> in the background for a quote from a legend of CS &amp; AI</p>
             </div>
         </section>
 
@@ -348,30 +611,38 @@
                     </div>
                     <div class="md:w-2/3">
                         <p id="bio-text" class="text-lg text-gray-300 mb-6">
-                            Aspiring Data Analyst with a background in Python, SQL, Tableau, and Data Visualization. Skilled in data cleaning, exploratory analysis, and predictive modeling with practical project experience. Hands-on exposure to real-world analytics and ML applications through academic and internship projects.
+                            I'm a Machine Learning Engineer with nearly 2 years of experience, currently building AI-powered emergency triage systems at <span class="text-cyan-300 font-semibold">AIIMS Raipur</span>. My work covers the full applied-AI stack: classical ML on 54,000+ real patient records, LLM fine-tuning with QLoRA, Retrieval-Augmented Generation (RAG), speech-to-text and computer vision.
+                        </p>
+                        <p class="text-lg text-gray-300 mb-6">
+                            I care about models that hold up in the real world, so I focus on rigorous evaluation, catching data leakage, explainability (SHAP) and deploying with FastAPI and React. I work closely with doctors to turn clinical protocols into reliable AI.
                         </p>
                         <div class="flex justify-center md:justify-start">
-                            <a href="./Aditya Londhe.pdf" download="Aditya_Londhe_Resume.pdf" target="_blank" class="bg-transparent border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
+                            <a href="./Aditya_Londhe_Resume.pdf" download="Aditya_Londhe_Resume.pdf" target="_blank" class="bg-transparent border border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-gray-900 font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105">
                                 Download Resume
                             </a>
                         </div>
                         <h3 class="text-2xl font-semibold text-white mb-4 mt-8">My Skillset</h3>
+                        <p class="skill-hint">Hover a skill to see how well I know it</p>
+                        <!-- data-level = how well I know the skill (0–100). Change the numbers any time. -->
                         <div id="skill-list" class="flex flex-wrap gap-3">
-                            <span class="skill-tag py-2 px-4 text-sm">Python</span>
-                            <span class="skill-tag py-2 px-4 text-sm">Core Java</span>
-                            <span class="skill-tag py-2 px-4 text-sm">MySQL</span>
-                            <span class="skill-tag py-2 px-4 text-sm">Bash</span>
-                            <span class="skill-tag py-2 px-4 text-sm">HTML</span>
-                            <span class="skill-tag py-2 px-4 text-sm">CSS</span>
-                            <span class="skill-tag py-2 px-4 text-sm">Scikit-learn</span>
-                            <span class="skill-tag py-2 px-4 text-sm">Keras</span>
-                            <span class="skill-tag py-2 px-4 text-sm">Pandas</span>
-                            <span class="skill-tag py-2 px-4 text-sm">NumPy</span>
-                            <span class="skill-tag py-2 px-4 text-sm">Tableau</span>
-                            <span class="skill-tag py-2 px-4 text-sm">Predictive Modeling</span>
-                            <span class="skill-tag py-2 px-4 text-sm">Deep Learning</span>
-                            <span class="skill-tag py-2 px-4 text-sm">Linux</span>
-                            <span class="skill-tag py-2 px-4 text-sm">WebRTC</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="95">Python</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="80">LLM Fine-tuning (QLoRA)</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="80">RAG</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="75">Hugging Face</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="70">PyTorch</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="90">XGBoost / LightGBM</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="90">Scikit-learn</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="80">NLP</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="75">ChromaDB</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="80">Ollama</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="70">Whisper STT</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="65">YOLOv8 / OCR</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="75">SHAP</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="75">FastAPI</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="35">React.js</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="70">SQL</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="90">Pandas / NumPy</span>
+                            <span class="skill-tag py-2 px-4 text-sm" data-level="45">Azure</span>
                         </div>
                     </div>
                 </div>
@@ -381,30 +652,22 @@
         <!-- Stats Section -->
         <section id="stats" class="py-20 md:py-32 bg-black/30">
             <div class="container mx-auto px-6 reveal">
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
                     <div>
-                        <h3 class="text-5xl font-bold text-cyan-400" data-target="50000">0</h3>
-                        <p class="text-lg text-gray-400 mt-2">Lines of Code</p>
-                    </div>
-                    <div>
-                        <h3 class="text-5xl font-bold text-cyan-400" data-target="12">0</h3>
-                        <p class="text-lg text-gray-400 mt-2">Projects Completed</p>
+                        <h3 class="text-5xl font-bold text-cyan-400" data-target="54000" data-suffix="+">0</h3>
+                        <p class="text-lg text-gray-400 mt-2">Patient Records Modeled</p>
                     </div>
                     <div>
-                        <h3 class="text-5xl font-bold text-cyan-400" data-target="8">0</h3>
-                        <p class="text-lg text-gray-400 mt-2">Models Deployed</p>
+                        <h3 class="text-5xl font-bold text-cyan-400" data-target="94" data-suffix="%">0</h3>
+                        <p class="text-lg text-gray-400 mt-2">Recall on Critical Patients</p>
                     </div>
-                    <div class="md:col-span-1">
-                        <h3 class="text-5xl font-bold text-cyan-400" data-target="9">0</h3>
-                        <p class="text-lg text-gray-400 mt-2">GitHub Commits</p>
+                    <div>
+                        <h3 class="text-5xl font-bold text-cyan-400" data-target="2818">0</h3>
+                        <p class="text-lg text-gray-400 mt-2">Clinical Cases Benchmarked Across 5 LLMs</p>
                     </div>
-                    <!-- <div class="md:col-span-1">
-                        <h3 class="text-5xl font-bold text-cyan-400" data-target="100">0</h3>
-                        <p class="text-lg text-gray-400 mt-2">Terabytes Processed</p>
-                    </div> -->
-                    <div class="md:col-span-1">
-                        <h3 class="text-5xl font-bold text-cyan-400" data-target="999">0</h3>
-                        <p class="text-lg text-gray-400 mt-2">Coffees Consumed</p>
+                    <div>
+                        <h3 class="text-5xl font-bold text-cyan-400" data-target="18000" data-suffix="+">0</h3>
+                        <p class="text-lg text-gray-400 mt-2">Users Served by Face Recognition System</p>
                     </div>
                 </div>
             </div>
@@ -415,13 +678,231 @@
             <div class="container mx-auto px-6 reveal">
                 <div class="text-center mb-16">
                     <h2 class="text-4xl font-bold text-white">My Projects</h2>
-                    <p class="text-lg text-gray-400 mt-2">A selection of my work in Data Analytics, ML, and AI.</p>
+                    <p class="text-lg text-gray-400 mt-2">Healthcare AI, LLMs, RAG and applied machine learning.</p>
                     <div class="w-24 h-1 bg-cyan-400 mx-auto mt-4 rounded"></div>
                 </div>
+
+                <h3 class="text-2xl font-semibold text-white mb-2">Healthcare AI <span class="text-cyan-400">@ AIIMS Raipur</span></h3>
+                <p class="text-gray-400 mb-8 text-sm">Research work on real hospital data. Code is not public because of patient privacy.</p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+                    <!-- AIIMS 1: Triage system -->
+                    <div class="project-card overflow-hidden group">
+                        <div class="card-banner" role="img" aria-label="Patient heartbeat sorted into red, yellow and green triage levels">
+                            <svg viewBox="0 0 220 104" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path class="ill-a ill-draw" d="M6 52 H50 L60 30 L72 78 L84 18 L96 66 L104 52 H128"/>
+                                <path class="ill-soft" d="M128 52 L150 22 M128 52 H150 M128 52 L150 82"/>
+                                <rect x="152" y="10" width="62" height="22" rx="11" stroke="#ef4444" fill="rgba(239,68,68,0.18)" class="ill-pulse"/>
+                                <rect x="152" y="41" width="62" height="22" rx="11" stroke="#eab308" fill="rgba(234,179,8,0.18)" class="ill-pulse-2"/>
+                                <rect x="152" y="72" width="62" height="22" rx="11" stroke="#22c55e" fill="rgba(34,197,94,0.18)" class="ill-pulse-3"/>
+                                <text x="183" y="25.5" text-anchor="middle" font-size="10" font-weight="700" fill="#ef4444" stroke="none">RED</text>
+                                <text x="183" y="56.5" text-anchor="middle" font-size="10" font-weight="700" fill="#ca8a04" stroke="none">YELLOW</text>
+                                <text x="183" y="87.5" text-anchor="middle" font-size="10" font-weight="700" fill="#16a34a" stroke="none">GREEN</text>
+                            </svg>
+                            <span class="ill-label">AI Emergency Triage</span>
+                        </div>
+                        <div class="p-6">
+                            <div class="project-card-content">
+                                <h3 class="text-xl font-bold text-white mb-2">AI-Powered Emergency Triage System</h3>
+                                <p class="text-gray-400 mb-4 text-sm project-description">Multi-tier clinical decision-support system (decision tree → ML → RAG) that sorts ED patients into RED / YELLOW / GREEN. Trained on 54,000+ patient records with <span class="text-cyan-300">0.94 recall on critical patients</span>; LightGBM model running live on the triage website.</p>
+                                <div class="flex flex-wrap gap-2 mb-4 project-tags">
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">LightGBM</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">XGBoost</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">NLP (TF-IDF)</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">SHAP</span>
+                                </div>
+                            </div>
+                            <span class="research-badge">Research · AIIMS Raipur</span>
+                        </div>
+                    </div>
+                    <!-- AIIMS 2: MedGemma -->
+                    <div class="project-card overflow-hidden group">
+                        <div class="card-banner" role="img" aria-label="Neural network being fine-tuned with a medical cross">
+                            <svg viewBox="0 0 220 104" fill="none" stroke-width="2" stroke-linecap="round">
+                                <g class="ill-soft">
+                                    <path d="M40 20 L100 14 M40 20 L100 52 M40 20 L100 90 M40 52 L100 14 M40 52 L100 52 M40 52 L100 90 M40 84 L100 14 M40 84 L100 52 M40 84 L100 90"/>
+                                    <path d="M100 14 L160 33 M100 14 L160 71 M100 52 L160 33 M100 52 L160 71 M100 90 L160 33 M100 90 L160 71"/>
+                                </g>
+                                <path class="ill-a ill-draw" d="M40 52 L100 52 L160 33"/>
+                                <circle cx="40" cy="20" r="7" class="ill-a fill-soft"/>
+                                <circle cx="40" cy="52" r="7" class="ill-a fill-a"/>
+                                <circle cx="40" cy="84" r="7" class="ill-a fill-soft"/>
+                                <circle cx="100" cy="14" r="7" class="ill-b fill-soft"/>
+                                <circle cx="100" cy="52" r="7" class="ill-b fill-b ill-pulse"/>
+                                <circle cx="100" cy="90" r="7" class="ill-b fill-soft"/>
+                                <circle cx="160" cy="33" r="7" class="ill-c fill-c ill-pulse-2"/>
+                                <circle cx="160" cy="71" r="7" class="ill-c fill-soft"/>
+                                <rect x="182" y="36" width="30" height="30" rx="8" class="ill-a"/>
+                                <path class="ill-a" stroke-width="3.5" d="M197 43 V59 M189 51 H205"/>
+                            </svg>
+                            <span class="ill-label">Medical LLM Fine-tuning</span>
+                        </div>
+                        <div class="p-6">
+                            <div class="project-card-content">
+                                <h3 class="text-xl font-bold text-white mb-2">MedGemma 4B Fine-tuning for Triage</h3>
+                                <p class="text-gray-400 mb-4 text-sm project-description">Fine-tuned Google's MedGemma 4B with Unsloth QLoRA on 51,000+ chain-of-thought examples. Reached <span class="text-cyan-300">86.4% accuracy</span> on a 4,710-patient prospective holdout; quantized to GGUF and served locally with Ollama.</p>
+                                <div class="flex flex-wrap gap-2 mb-4 project-tags">
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">QLoRA</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Unsloth</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Hugging Face</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Ollama</span>
+                                </div>
+                            </div>
+                            <span class="research-badge">Research · AIIMS Raipur</span>
+                        </div>
+                    </div>
+                    <!-- AIIMS 3: RAG -->
+                    <div class="project-card overflow-hidden group">
+                        <div class="card-banner" role="img" aria-label="Protocol documents retrieved into a vector store and answered in a chat">
+                            <svg viewBox="0 0 220 104" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="8" y="22" width="40" height="52" rx="5" class="ill-soft fill-soft"/>
+                                <rect x="16" y="14" width="40" height="52" rx="5" class="ill-a"/>
+                                <path class="ill-a" d="M24 28 H48 M24 37 H48 M24 46 H40"/>
+                                <path class="ill-soft ill-draw" d="M60 40 H84" stroke-dasharray="4 5"/>
+                                <circle cx="110" cy="40" r="22" class="ill-b"/>
+                                <circle cx="102" cy="34" r="3.5" class="fill-b ill-pulse" stroke="none"/>
+                                <circle cx="117" cy="31" r="3.5" class="fill-b ill-pulse-2" stroke="none"/>
+                                <circle cx="113" cy="47" r="3.5" class="fill-b ill-pulse-3" stroke="none"/>
+                                <circle cx="100" cy="48" r="3.5" class="fill-b" stroke="none"/>
+                                <path class="ill-soft ill-draw" d="M136 40 H158" stroke-dasharray="4 5"/>
+                                <path class="ill-c" d="M164 18 H210 a6 6 0 0 1 6 6 V54 a6 6 0 0 1 -6 6 H182 L172 70 V60 H164 a6 6 0 0 1 -6 -6 V24 a6 6 0 0 1 6 -6 Z"/>
+                                <path class="ill-c" d="M168 31 H206 M168 41 H198"/>
+                                <text x="110" y="86" text-anchor="middle" font-size="9" font-weight="600" class="fill-b" stroke="none">VECTOR SEARCH</text>
+                            </svg>
+                            <span class="ill-label">Clinical RAG</span>
+                        </div>
+                        <div class="p-6">
+                            <div class="project-card-content">
+                                <h3 class="text-xl font-bold text-white mb-2">Protocol-Grounded RAG Triage Pipeline</h3>
+                                <p class="text-gray-400 mb-4 text-sm project-description">RAG system grounded in the hospital's triage protocol, with safety gates for critical cases and an adaptive follow-up-question layer to resolve unclear patients. Designed for 500+ patients/day.</p>
+                                <div class="flex flex-wrap gap-2 mb-4 project-tags">
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">RAG</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">ChromaDB</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Llama 4</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Cloudflare AI</span>
+                                </div>
+                            </div>
+                            <span class="research-badge">Research · AIIMS Raipur</span>
+                        </div>
+                    </div>
+                    <!-- AIIMS 4: Voice summary -->
+                    <div class="project-card overflow-hidden group">
+                        <div class="card-banner" role="img" aria-label="Microphone sound waves turning into a written clinical summary">
+                            <svg viewBox="0 0 220 104" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="14" y="22" width="22" height="38" rx="11" class="ill-a"/>
+                                <path class="ill-a" d="M8 50 a17 17 0 0 0 34 0 M25 67 V80 M16 80 H34"/>
+                                <g class="ill-b">
+                                    <path class="ill-pulse" d="M56 44 V60"/>
+                                    <path class="ill-pulse-2" d="M66 34 V70"/>
+                                    <path class="ill-pulse-3" d="M76 24 V80"/>
+                                    <path class="ill-pulse" d="M86 38 V66"/>
+                                    <path class="ill-pulse-2" d="M96 28 V76"/>
+                                    <path class="ill-pulse-3" d="M106 42 V62"/>
+                                    <path class="ill-pulse" d="M116 48 V56"/>
+                                </g>
+                                <path class="ill-soft" d="M128 52 H144 M138 46 L144 52 L138 58"/>
+                                <rect x="152" y="12" width="58" height="80" rx="6" class="ill-c"/>
+                                <path class="ill-c" d="M162 26 H200"/>
+                                <path class="ill-soft" stroke-width="2" d="M162 38 H200 M162 48 H192 M162 58 H200 M162 68 H186 M162 78 H196"/>
+                            </svg>
+                            <span class="ill-label">Voice to Clinical Summary</span>
+                        </div>
+                        <div class="p-6">
+                            <div class="project-card-content">
+                                <h3 class="text-xl font-bold text-white mb-2">Voice-Based Clinical Summarization</h3>
+                                <p class="text-gray-400 mb-4 text-sm project-description">ED staff dictate patient details; Whisper transcribes the speech and an LLM turns it into a structured clinical summary. Includes a chief-complaint autocorrect for ED shorthand and spelling errors.</p>
+                                <div class="flex flex-wrap gap-2 mb-4 project-tags">
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Whisper</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">LLM</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">FastAPI</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">React</span>
+                                </div>
+                            </div>
+                            <span class="research-badge">Research · AIIMS Raipur</span>
+                        </div>
+                    </div>
+                    <!-- AIIMS 5: Benchmark -->
+                    <div class="project-card overflow-hidden group">
+                        <div class="card-banner" role="img" aria-label="Bar chart comparing AI models with doctors">
+                            <svg viewBox="0 0 220 104" fill="none" stroke-width="2" stroke-linecap="round">
+                                <path class="ill-soft" d="M20 90 H210 M20 90 V8"/>
+                                <path class="ill-soft" stroke-dasharray="3 5" d="M20 20 H210"/>
+                                <rect x="32" y="22" width="20" height="68" rx="3" class="ill-a fill-a"/>
+                                <rect x="62" y="34" width="20" height="56" rx="3" class="ill-a fill-soft"/>
+                                <rect x="92" y="38" width="20" height="52" rx="3" class="ill-a fill-soft"/>
+                                <rect x="122" y="46" width="20" height="44" rx="3" class="ill-a fill-soft"/>
+                                <rect x="152" y="30" width="20" height="60" rx="3" class="ill-b fill-soft"/>
+                                <rect x="182" y="26" width="20" height="64" rx="3" class="ill-c fill-soft"/>
+                                <circle cx="42" cy="12" r="5" class="fill-a ill-pulse" stroke="none"/>
+                                <text x="87" y="102" text-anchor="middle" font-size="8" font-weight="600" class="fill-a" stroke="none">AI MODELS</text>
+                                <text x="177" y="102" text-anchor="middle" font-size="8" font-weight="600" class="fill-c" stroke="none">DOCTORS</text>
+                            </svg>
+                            <span class="ill-label">LLM Benchmarking</span>
+                        </div>
+                        <div class="p-6">
+                            <div class="project-card-content">
+                                <h3 class="text-xl font-bold text-white mb-2">LLMs vs Doctors: Triage Benchmark</h3>
+                                <p class="text-gray-400 mb-4 text-sm project-description">Compared 5 LLMs (Claude, GPT-4o, Gemini, DeepSeek, Llama) with nurses and emergency physicians on 2,818 clinical cases. Best model reached <span class="text-cyan-300">96.6% recall on critical cases</span>.</p>
+                                <div class="flex flex-wrap gap-2 mb-4 project-tags">
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">LLM Evaluation</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Prompt Engineering</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">Statistics</span>
+                                </div>
+                            </div>
+                            <span class="research-badge">Research · AIIMS Raipur</span>
+                        </div>
+                    </div>
+                    <!-- AIIMS 6: Vitals OCR -->
+                    <div class="project-card overflow-hidden group">
+                        <div class="card-banner" role="img" aria-label="Bedside monitor with detection box reading heart rate and oxygen">
+                            <svg viewBox="0 0 220 104" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="20" y="8" width="180" height="80" rx="8" class="ill-soft fill-soft"/>
+                                <path class="ill-soft" d="M95 88 V98 M80 98 H140"/>
+                                <path class="ill-a ill-draw" stroke-width="2.5" d="M30 48 H52 L58 34 L66 62 L74 26 L82 56 L88 48 H112"/>
+                                <rect x="122" y="16" width="70" height="30" rx="4" class="ill-c" stroke-dasharray="5 4"/>
+                                <text x="130" y="29" font-size="8" font-weight="700" class="fill-c" stroke="none">HR</text>
+                                <text x="186" y="40" text-anchor="end" font-size="16" font-weight="800" class="fill-a ill-pulse" stroke="none">78</text>
+                                <rect x="122" y="52" width="70" height="30" rx="4" class="ill-b" stroke-dasharray="5 4"/>
+                                <text x="130" y="65" font-size="8" font-weight="700" class="fill-b" stroke="none">SpO2</text>
+                                <text x="186" y="76" text-anchor="end" font-size="16" font-weight="800" class="fill-a ill-pulse-2" stroke="none">98%</text>
+                            </svg>
+                            <span class="ill-label">Vitals Monitor OCR</span>
+                        </div>
+                        <div class="p-6">
+                            <div class="project-card-content">
+                                <h3 class="text-xl font-bold text-white mb-2">Vitals Monitor OCR &amp; ECG AI</h3>
+                                <p class="text-gray-400 mb-4 text-sm project-description">Reads heart rate, SpO2 and BP from bedside monitor photos using YOLOv8 + EasyOCR, served as a FastAPI microservice. Also built a deep learning classifier on 3,939 ECG images to detect STEMI (heart attack).</p>
+                                <div class="flex flex-wrap gap-2 mb-4 project-tags">
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">YOLOv8</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">EasyOCR</span>
+                                    <span class="text-xs bg-cyan-900/50 text-cyan-300 py-1 px-3 rounded-full">PyTorch</span>
+                                </div>
+                            </div>
+                            <span class="research-badge">Research · AIIMS Raipur</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-white mb-8">Open-Source Projects</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Project 1: Agentic Visual Understanding Chat Assistant -->
                     <div class="project-card overflow-hidden group">
-                        <img src="https://placehold.co/600x400/0a0a1a/e0e0e0?text=Video+Analysis" class="w-full h-48 object-cover" alt="Agentic Visual Understanding Chat Assistant">
+                        <div class="card-banner" role="img" aria-label="Video frame with an object detection box and a chat reply">
+                            <svg viewBox="0 0 220 104" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="10" y="10" width="130" height="80" rx="8" class="ill-soft fill-soft"/>
+                                <path class="ill-soft" d="M10 76 H140"/>
+                                <path class="ill-a" stroke-width="3" d="M20 83 H70"/>
+                                <circle cx="70" cy="83" r="4" class="fill-a" stroke="none"/>
+                                <path class="ill-soft" d="M24 66 L50 38 L70 56 L90 30 L126 66"/>
+                                <rect x="78" y="22" width="34" height="30" rx="2" class="ill-c ill-pulse"/>
+                                <rect x="78" y="14" width="30" height="9" rx="2" class="fill-c" stroke="none"/>
+                                <text x="81" y="21" font-size="6.5" font-weight="700" fill="#fff" stroke="none">OBJECT</text>
+                                <path class="ill-b" d="M152 26 H206 a6 6 0 0 1 6 6 V58 a6 6 0 0 1 -6 6 H176 L166 74 V64 H152 a6 6 0 0 1 -6 -6 V32 a6 6 0 0 1 6 -6 Z"/>
+                                <circle cx="165" cy="45" r="3" class="fill-b ill-pulse" stroke="none"/>
+                                <circle cx="179" cy="45" r="3" class="fill-b ill-pulse-2" stroke="none"/>
+                                <circle cx="193" cy="45" r="3" class="fill-b ill-pulse-3" stroke="none"/>
+                            </svg>
+                            <span class="ill-label">Video Understanding Agent</span>
+                        </div>
                         <div class="p-6">
                             <div class="project-card-content">
                                 <h3 class="text-xl font-bold text-white mb-2">Agentic Visual Understanding Chat Assistant</h3>
@@ -438,7 +919,20 @@
                     </div>
                     <!-- Project 2: DGA Detection -->
                     <div class="project-card overflow-hidden group">
-                        <img src="https://placehold.co/600x400/0a0a1a/e0e0e0?text=DGA+Detection" class="w-full h-48 object-cover" alt="DGA Detection Project">
+                        <div class="card-banner" role="img" aria-label="Shield scanning domain names and flagging a suspicious one">
+                            <svg viewBox="0 0 220 104" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="8" y="12" width="96" height="18" rx="9" class="ill-soft"/>
+                                <text x="18" y="25" font-size="9" font-family="monospace" class="fill-a" stroke="none">google.com ✓</text>
+                                <rect x="8" y="42" width="96" height="18" rx="9" class="ill-c ill-pulse"/>
+                                <text x="18" y="55" font-size="9" font-family="monospace" class="fill-c" stroke="none">xq7kz9vb.net ✗</text>
+                                <rect x="8" y="72" width="96" height="18" rx="9" class="ill-soft"/>
+                                <text x="18" y="85" font-size="9" font-family="monospace" class="fill-a" stroke="none">github.com ✓</text>
+                                <path class="ill-soft ill-draw" stroke-dasharray="4 5" d="M110 51 H134"/>
+                                <path class="ill-a" stroke-width="2.5" d="M172 10 L206 22 V50 C206 72 190 86 172 94 C154 86 138 72 138 50 V22 Z"/>
+                                <path class="ill-b" stroke-width="3" d="M158 52 L168 62 L188 40"/>
+                            </svg>
+                            <span class="ill-label">DGA Detection</span>
+                        </div>
                         <div class="p-6">
                             <div class="project-card-content">
                                 <h3 class="text-xl font-bold text-white mb-2">DGA Detection Using Deep Learning</h3>
@@ -454,7 +948,21 @@
                     </div>
                     <!-- Project 3: Song Recommendation -->
                     <div class="project-card overflow-hidden group">
-                        <img src="https://placehold.co/600x400/0a0a1a/e0e0e0?text=Mood+Music" class="w-full h-48 object-cover" alt="Song Recommendation Project">
+                        <div class="card-banner" role="img" aria-label="Face being scanned for mood and turned into music">
+                            <svg viewBox="0 0 220 104" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="52" cy="52" r="34" class="ill-a"/>
+                                <circle cx="40" cy="44" r="3.5" class="fill-a" stroke="none"/>
+                                <circle cx="64" cy="44" r="3.5" class="fill-a" stroke="none"/>
+                                <path class="ill-a" d="M38 62 Q52 74 66 62"/>
+                                <path class="ill-c" stroke-width="2" d="M14 22 V12 H24 M80 12 H90 V22 M90 82 V92 H80 M24 92 H14 V82"/>
+                                <path class="ill-soft ill-draw" stroke-dasharray="4 5" d="M98 52 H124"/>
+                                <path class="ill-b" d="M150 72 V26 L190 18 V64"/>
+                                <circle cx="143" cy="72" r="8" class="ill-b fill-b ill-pulse"/>
+                                <circle cx="183" cy="64" r="8" class="ill-b fill-b ill-pulse-2"/>
+                                <path class="ill-c ill-pulse-3" stroke-width="2" d="M200 30 q6 -6 12 0 M204 40 q4 -4 8 0"/>
+                            </svg>
+                            <span class="ill-label">Mood-Based Music</span>
+                        </div>
                         <div class="p-6">
                             <div class="project-card-content">
                                 <h3 class="text-xl font-bold text-white mb-2">Song Recommendation Using Mood Detection</h3>
@@ -501,16 +1009,39 @@
                     <div class="w-24 h-1 bg-cyan-400 mx-auto mt-4 rounded"></div>
                 </div>
                 <div class="timeline">
-                    <!-- Item 1: ML Intern -->
+                    <!-- Item 1: AIIMS -->
                     <div class="timeline-item timeline-left">
                         <div class="timeline-content">
-                            <h3 class="experience-title">ML Intern</h3>
-                            <p class="experience-date">25 Dec 2024 - 15 Sept 2025</p>
-                            <p class="experience-company">Feasible Research and Technologies Pvt. Ltd.</p>
-                            <p class="text-gray-300">Assisted in developing and testing machine learning models and supported real-time data processing tasks, gaining hands-on experience in a professional tech environment.</p>
+                            <h3 class="experience-title">Research Project Assistant (AI/ML)</h3>
+                            <p class="experience-date">Feb 2026 - Present</p>
+                            <p class="experience-company">All India Institute of Medical Sciences (AIIMS), Raipur · Emergency Department</p>
+                            <ul class="text-gray-300 list-disc pl-5 space-y-1">
+                                <li>Building ADiTI, an AI-powered emergency triage platform (decision tree → ML → RAG).</li>
+                                <li>ML models on 54,000+ patient records with 0.94 recall on critical patients; LightGBM deployed live.</li>
+                                <li>Fine-tuned MedGemma 4B (QLoRA) and built a protocol-grounded RAG pipeline.</li>
+                                <li>Voice-to-clinical-summary app (Whisper + LLM), live ED dashboard and SHAP reports for doctors.</li>
+                            </ul>
                         </div>
                     </div>
-                     <!-- Item 2: ML Intern Cognifyz -->
+                    <!-- Item 2: Newetrix -->
+                    <div class="timeline-item timeline-right">
+                        <div class="timeline-content">
+                            <h3 class="experience-title">Freelance React Developer</h3>
+                            <p class="experience-date">Oct 2025 - Jan 2026</p>
+                            <p class="experience-company">Newetrix Innovations · Hybrid</p>
+                            <p class="text-gray-300">Built responsive web applications with React.js and REST APIs, covering UI development, authentication and backend integration.</p>
+                        </div>
+                    </div>
+                    <!-- Item 3: Feasible -->
+                    <div class="timeline-item timeline-left">
+                        <div class="timeline-content">
+                            <h3 class="experience-title">Machine Learning Engineer</h3>
+                            <p class="experience-date">Dec 2024 - Sep 2025</p>
+                            <p class="experience-company">Feasible Research and Technologies Pvt. Ltd.</p>
+                            <p class="text-gray-300">Built a real-time face recognition attendance system serving 18,000+ users, with end-to-end pipelines for facial embeddings, attendance logs and user metadata. Trained and evaluated computer vision models.</p>
+                        </div>
+                    </div>
+                     <!-- Item 4: ML Intern Cognifyz -->
                      <div class="timeline-item timeline-right">
                         <div class="timeline-content">
                              <h3 class="experience-title">ML Intern</h3>
@@ -543,7 +1074,7 @@
                     <!-- Item 2: Codenera -->
                     <div class="timeline-item timeline-right">
                         <div class="timeline-content">
-                             <h3 class="experience-title">Python Data Science and Java</h3>
+                             <h3 class="experience-title">Data Science Certification</h3>
                              <p class="experience-date">Aug 2023 - Feb 2024</p>
                              <p class="experience-company">Codenera Institute, Pune</p>
                              <p class="text-gray-300">Specialized training in Python for Data Science and Core Java programming.</p>
@@ -568,6 +1099,13 @@
                         </div>
                     </div>
                 </div>
+                <div class="max-w-3xl mx-auto mt-12 text-center">
+                    <h3 class="text-2xl font-semibold text-white mb-4">Certifications</h3>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        <span class="text-sm bg-cyan-900/50 text-cyan-300 py-2 px-4 rounded-full">Microsoft Azure DP-100: Data Science Solution on Azure</span>
+                        <span class="text-sm bg-cyan-900/50 text-cyan-300 py-2 px-4 rounded-full">Data Science · CodeNera, Pune</span>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -576,7 +1114,8 @@
             <div class="container mx-auto px-6 reveal">
                 <div class="text-center mb-12">
                     <h2 class="text-4xl font-bold text-white">Get In Touch</h2>
-                    <p class="text-lg text-gray-400 mt-2">I'm open to new opportunities and collaborations.</p>
+                    <p class="text-lg text-gray-400 mt-2">Open to Machine Learning, GenAI and Healthcare AI roles.</p>
+                    <p class="mt-3"><a href="mailto:adityalondhe052@gmail.com" class="text-cyan-400 hover:text-cyan-300 font-semibold">adityalondhe052@gmail.com</a></p>
                     <div class="w-24 h-1 bg-cyan-400 mx-auto mt-4 rounded"></div>
                 </div>
                 <div class="max-w-xl mx-auto">
@@ -601,13 +1140,29 @@
             <div class="flex justify-center space-x-6 mb-4">
                 <a href="https://github.com/Aditya052-dev" target="_blank" class="hover:text-cyan-400 transition-colors">GitHub</a>
                 <a href="https://www.linkedin.com/in/aditya-londhe-69a106207" target="_blank" class="hover:text-cyan-400 transition-colors">LinkedIn</a>
+                <a href="mailto:adityalondhe052@gmail.com" class="hover:text-cyan-400 transition-colors">Email</a>
+                <a href="./Aditya_Londhe_Resume.pdf" target="_blank" class="hover:text-cyan-400 transition-colors">Resume</a>
             </div>
-            <p>&copy; 2025 ADITYA LONDHE. All Rights Reserved.</p>
+            <p>&copy; 2026 ADITYA LONDHE. All Rights Reserved.</p>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // --- Skill level fill: read data-level and set up the fill + number ---
+            document.querySelectorAll('#skill-list .skill-tag[data-level]').forEach(tag => {
+                const lvl = Math.max(0, Math.min(100, parseInt(tag.dataset.level, 10) || 0));
+                tag.style.setProperty('--lvl', lvl + '%');
+                tag.setAttribute('tabindex', '0');
+                tag.setAttribute('title', `${tag.textContent.trim()}: ${lvl}%`);
+                tag.setAttribute('aria-label', `${tag.textContent.trim()}, skill level ${lvl} percent`);
+                const num = document.createElement('span');
+                num.className = 'lvl';
+                num.textContent = lvl + '%';
+                num.setAttribute('aria-hidden', 'true');
+                tag.appendChild(num);
+            });
+
             // --- Mobile Menu Toggle ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -641,7 +1196,152 @@
 
 
             // --- Three.js Animated Background ---
-            let scene, camera, renderer, particles, lines;
+            let scene, camera, renderer, particles, lines, particleMaterial, lineMaterial;
+            const isLight = () => document.documentElement.classList.contains('light');
+
+            // Dark mode: colourful glowing boxes on a dark background.
+            // Light mode: black boxes and lines on a white background.
+            function applySceneTheme() {
+                if (!renderer) return;
+                if (isLight()) {
+                    renderer.setClearColor(0xf6f8fb, 1);
+                    particleMaterial.vertexColors = false;
+                    particleMaterial.color.set(0x000000);
+                    particleMaterial.blending = THREE.NormalBlending;
+                    particleMaterial.opacity = 0.75;
+                    lineMaterial.color.set(0x000000);
+                    lineMaterial.opacity = 0.12;
+                } else {
+                    renderer.setClearColor(0x0a0a1a, 1);
+                    particleMaterial.vertexColors = true;
+                    particleMaterial.color.set(0xffffff);
+                    particleMaterial.blending = THREE.AdditiveBlending;
+                    particleMaterial.opacity = 0.8;
+                    lineMaterial.color.set(0xffffff);
+                    lineMaterial.opacity = 0.1;
+                }
+                particleMaterial.needsUpdate = true;
+                lineMaterial.needsUpdate = true;
+            }
+
+            // --- Theme Toggle ---
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                document.documentElement.classList.toggle('light');
+                try { localStorage.setItem('theme', isLight() ? 'light' : 'dark'); } catch (e) {}
+                applySceneTheme();
+            });
+
+            // --- Neuron Quotes: click a background neuron to see a quote ---
+            const QUOTES = [
+                { text: "We can only see a short distance ahead, but we can see plenty there that needs to be done.", author: "Alan Turing", role: "Father of computer science · 1950" },
+                { text: "The most dangerous phrase in the language is, ‘We’ve always done it this way.’", author: "Grace Hopper", role: "Computing pioneer, creator of COBOL" },
+                { text: "Simplicity is prerequisite for reliability.", author: "Edsger W. Dijkstra", role: "Turing Award winner" },
+                { text: "Premature optimization is the root of all evil (or at least most of it) in programming.", author: "Donald Knuth", role: "Author of The Art of Computer Programming" },
+                { text: "AI is the new electricity.", author: "Andrew Ng", role: "Co-founder of Coursera & Google Brain" },
+                { text: "Talk is cheap. Show me the code.", author: "Linus Torvalds", role: "Creator of Linux & Git" },
+                { text: "The best way to predict the future is to invent it.", author: "Alan Kay", role: "Pioneer of object-oriented programming" },
+                { text: "All models are wrong, but some are useful.", author: "George E. P. Box", role: "Statistician" },
+                { text: "Any fool can write code that a computer can understand. Good programmers write code that humans can understand.", author: "Martin Fowler", role: "Author of Refactoring" },
+                { text: "Programs must be written for people to read, and only incidentally for machines to execute.", author: "Harold Abelson", role: "Co-author of SICP, MIT" },
+                { text: "There are only two hard things in Computer Science: cache invalidation and naming things.", author: "Phil Karlton", role: "Software engineer, Netscape" },
+                { text: "There’s nothing artificial about AI. It’s inspired by people, it’s created by people, and—most importantly—it impacts people.", author: "Fei-Fei Li", role: "Creator of ImageNet, Stanford" },
+                { text: "People worry that computers will get too smart and take over the world, but the real problem is that they’re too stupid and they’ve already taken over the world.", author: "Pedro Domingos", role: "Author of The Master Algorithm" },
+                { text: "The hottest new programming language is English.", author: "Andrej Karpathy", role: "Former Director of AI at Tesla" },
+                { text: "When in doubt, use brute force.", author: "Ken Thompson", role: "Co-creator of Unix" },
+                { text: "The Analytical Engine has no pretensions whatever to originate anything. It can do whatever we know how to order it to perform.", author: "Ada Lovelace", role: "First computer programmer · 1843" }
+            ];
+            // Shuffle once so every click shows a new quote until all are seen
+            let quoteOrder = [], quotePos = 0;
+            function nextQuote() {
+                if (quotePos >= quoteOrder.length) {
+                    quoteOrder = QUOTES.map((_, i) => i).sort(() => Math.random() - 0.5);
+                    quotePos = 0;
+                }
+                return QUOTES[quoteOrder[quotePos++]];
+            }
+
+            const quoteCard = document.getElementById('quote-card');
+            let lastQuotePoint = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+
+            function fillQuote() {
+                const q = nextQuote();
+                quoteCard.querySelector('.q-text').textContent = q.text;
+                quoteCard.querySelector('.q-author').textContent = '— ' + q.author;
+                quoteCard.querySelector('.q-role').textContent = q.role;
+            }
+
+            function showQuoteAt(x, y) {
+                lastQuotePoint = { x, y };
+                fillQuote();
+                quoteCard.classList.add('show');
+                // Place the card next to the neuron, kept inside the screen
+                const pad = 16;
+                const w = quoteCard.offsetWidth, h = quoteCard.offsetHeight;
+                let left = x + 20, top = y - h / 2;
+                if (left + w > window.innerWidth - pad) left = x - w - 20;
+                left = Math.max(pad, Math.min(left, window.innerWidth - w - pad));
+                top = Math.max(80, Math.min(top, window.innerHeight - h - pad));
+                quoteCard.style.left = left + 'px';
+                quoteCard.style.top = top + 'px';
+
+                const ring = document.createElement('div');
+                ring.className = 'neuron-ring';
+                ring.style.left = x + 'px';
+                ring.style.top = y + 'px';
+                document.body.appendChild(ring);
+                setTimeout(() => ring.remove(), 800);
+            }
+
+            function hideQuote() { quoteCard.classList.remove('show'); }
+
+            // Find the background neuron closest to a screen point (within maxDist pixels)
+            let projVec = null;
+            function findNeuronAt(x, y, maxDist) {
+                if (!particles || !camera) return null;
+                if (!projVec) projVec = new THREE.Vector3();
+                const pos = particles.geometry.attributes.position.array;
+                let best = null, bestD = maxDist * maxDist;
+                for (let i = 0; i < pos.length; i += 3) {
+                    projVec.set(pos[i], pos[i + 1], pos[i + 2]).project(camera);
+                    if (projVec.z > 1) continue; // behind the camera
+                    const sx = (projVec.x + 1) / 2 * window.innerWidth;
+                    const sy = (1 - projVec.y) / 2 * window.innerHeight;
+                    const d = (sx - x) ** 2 + (sy - y) ** 2;
+                    if (d < bestD) { bestD = d; best = { x: sx, y: sy }; }
+                }
+                return best;
+            }
+
+            // Clicks on text, cards, links or forms keep working normally
+            const BLOCKING = 'a, button, input, textarea, label, form, header, img, p, h1, h2, h3, h4, li, .project-card, .timeline-content, .skill-tag, #quote-card';
+
+            document.addEventListener('click', (e) => {
+                if (quoteCard.contains(e.target)) return;
+                if (e.target.closest(BLOCKING)) { hideQuote(); return; }
+                const hit = findNeuronAt(e.clientX, e.clientY, isTouchDevice ? 45 : 30);
+                if (hit) showQuoteAt(hit.x, hit.y);
+                else hideQuote();
+            });
+
+            quoteCard.querySelector('.q-close').addEventListener('click', hideQuote);
+            quoteCard.querySelector('.q-next').addEventListener('click', () => showQuoteAt(lastQuotePoint.x, lastQuotePoint.y));
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideQuote(); });
+            window.addEventListener('scroll', hideQuote, { passive: true });
+
+            // Enlarge the cursor when it is over a neuron, so people know it's clickable
+            if (!isTouchDevice) {
+                let hoverTick = false;
+                document.addEventListener('mousemove', (e) => {
+                    if (hoverTick) return;
+                    hoverTick = true;
+                    requestAnimationFrame(() => {
+                        hoverTick = false;
+                        const blocked = e.target.closest && e.target.closest(BLOCKING);
+                        const near = !blocked && findNeuronAt(e.clientX, e.clientY, 30);
+                        document.body.classList.toggle('near-neuron', !!near);
+                    });
+                });
+            }
             let mouseX = 0, mouseY = 0;
             let windowHalfX = window.innerWidth / 2;
             let windowHalfY = window.innerHeight / 2;
@@ -656,7 +1356,8 @@
                 renderer.setSize(window.innerWidth, window.innerHeight);
                 renderer.setClearColor(0x0a0a1a, 1);
 
-                const particleCount = 500;
+                // Fewer particles on small screens keeps phones smooth
+                const particleCount = window.innerWidth < 768 ? 180 : 350;
                 const positions = new Float32Array(particleCount * 3);
                 const velocities = new Float32Array(particleCount * 3);
                 const colors = new Float32Array(particleCount * 3);
@@ -682,7 +1383,7 @@
                 particleGeometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
                 particleGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-                const particleMaterial = new THREE.PointsMaterial({
+                particleMaterial = new THREE.PointsMaterial({
                     size: 10,
                     vertexColors: true,
                     transparent: true,
@@ -697,7 +1398,7 @@
                 const lineGeometry = new THREE.BufferGeometry();
                 const linePositions = new Float32Array(particleCount * particleCount * 3);
                 lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
-                const lineMaterial = new THREE.LineBasicMaterial({
+                lineMaterial = new THREE.LineBasicMaterial({
                     color: 0xffffff,
                     transparent: true,
                     opacity: 0.1
@@ -707,6 +1408,7 @@
 
                 document.addEventListener('mousemove', onDocumentMouseMove, false);
                 window.addEventListener('resize', onWindowResize, false);
+                applySceneTheme();
                 animate();
             }
             
@@ -826,7 +1528,7 @@
                                 counter.innerText = Math.ceil(count + inc);
                                 setTimeout(updateCount, 1);
                             } else {
-                                counter.innerText = target.toLocaleString();
+                                counter.innerText = target.toLocaleString('en-IN') + (counter.dataset.suffix || '');
                             }
                         };
                         updateCount();
@@ -888,28 +1590,5 @@
             initThreeJS();
         });
     </script>
-    <script>
-        // Disable right-click
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
-        document.onkeydown = function(e) {
-            if (event.keyCode == 123) { // F12
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Ctrl+Shift+I
-                return false;
-            }
-            if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Ctrl+Shift+J
-                return false;
-            }
-            if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // Ctrl+U
-                return false;
-            }
-        }
-    </script>
-
 </body>
 </html>
